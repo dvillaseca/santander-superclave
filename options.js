@@ -54,7 +54,6 @@ function createNew() {
       td.appendChild(input);
       input.maxLength = 2;
       input.minLength = 2;
-      input.style.width = '20px'
       input.type = 'text';
       inputs[l].push(input);
     }
@@ -83,7 +82,7 @@ function createNew() {
 function load() {
   chrome.storage.sync.get('superClave', function (data) {
     if (data.superClave == null) {
-      alert("No hay ninguna clave guardada");
+      messagePopup("No hay ninguna clave guardada");
       return;
     }
     let superClave = null;
@@ -94,7 +93,7 @@ function load() {
       console.log(e);
     }
     if (superClave == null || superClave.A == null || superClave.A.length != 5) {
-      alert("Clave Incorrecta")
+      messagePopup("Clave Incorrecta")
       return;
     }
     createNew();
@@ -109,7 +108,7 @@ function save() {
   pass1 = document.getElementById('pass1');
   pass2 = document.getElementById('pass2');
   if (pass1.value != pass2.value || pass1.value.length < 6) {
-    alert('Clave no coincide o es muy corta');
+    messagePopup('Clave no coincide o es muy corta');
     return;
   }
   let superClave = {};
@@ -121,7 +120,7 @@ function save() {
     for (let c of inputs[letter]) {
       let val = parseInt(c.value);
       if (isNaN(val)) {
-        alert('Error en ' + letter + index);
+        messagePopup('Error en ' + letter + index);
         return;
       }
       superClave[letter].push(val);
@@ -129,5 +128,16 @@ function save() {
     }
   }
   chrome.storage.sync.set({ superClave: encrypt(JSON.stringify(superClave), pass1.value) });
-  alert("SuperClave Guardada!");
+  messagePopup("SuperClave Guardada!");
+}
+function messagePopup(text) {
+  let modal = document.getElementById('modal');
+  modal.style.display = 'block';
+  modal.innerHTML = text + "<br>";
+  let button = document.createElement('button');
+  button.innerHTML = 'OK';
+  button.onclick = () => {
+    modal.style.display = 'none';
+  }
+  modal.appendChild(button);
 }

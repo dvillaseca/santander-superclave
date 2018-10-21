@@ -4,8 +4,7 @@
   "description": "Super Clave Automatica!",
   "permissions": [
     "activeTab",
-    "storage",    
-    "<all_urls>"
+    "storage"
   ],
   "options_page": "options.html",
   "browser_action": {

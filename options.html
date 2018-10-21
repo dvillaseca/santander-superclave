@@ -2,19 +2,64 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="css/milligram.min.css">
   <style>
+    .cont {
+      width: 400px;
+      margin: auto;
+    }
+    td {
+      padding: 0;
+      text-align: center;
+    }
+    td input {      
+      margin: 0;
+      padding:7px !important;
+      text-align: center;
+      font-weight: bold;
+    }    
+    tr:nth-child(even) {
+      background: #DDD;
+    } 
+    tr:nth-child(odd) {
+      background: #EFEFEF;
+    }
+    tr:first-child {
+       background: #EC1C24; 
+       color: #FFF
+      } 
+    td:first-child {
+      background: #EC1C24; 
+      color: #FFF;
+      width: 30px;
+    }
+    #modal {
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding-top: 5px;
+      position: absolute;
+      background: #FFF;
+      text-align: center;
+      display: none;
+      font-size: 120%;
+    }
   </style>
 </head>
 
 <body>
-  <h2>
-    Crear o editar SuperClave
-  </h2>
-  <div id='main'></div>
-  <div id='io'>
-    Clave: <input type="password" id='pass1' placeholder="Password para cargar"/> 
-    <button id='load'>Cargar Guardada</button> <br>O<br>
-    <button id='new'>Crear Nueva</button>
+  <div class='cont'>
+    <h3 style="text-align:center">
+      Crear o editar SuperClave
+    </h3>
+    <div id='main'></div>
+    <div id='io'>
+      Clave: <input type="password" id='pass1' placeholder="Password para cargar" />
+      <button id='load'>Cargar Guardada</button> <br>O<br>
+      <button id='new'>Crear Nueva</button>
+    </div>
+    <div id='modal'></div>
   </div>
   <script src="aes.js"></script>
   <script src="dec-enc.js"></script>
