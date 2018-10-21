@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      height: 110px;
+      width: 185px;
+      margin: auto;
+    }
+
+    #modal {
+      height: 100%;
+      width: 100%;
+      top:0;
+      left: 0;
+      padding-top: 5px;
+      position: absolute;
+      background: #FFF;
+      text-align: center;
+      display: none;
+      font-size: 120%;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="margin:auto;width:170px">
+    <h2 style="text-align:center; margin-top:5px">
+      Super Clave
+    </h2>
+    <div id="main">
+      <button id="addPassword">BUSCAR CAMPO</button>
+    </div>
+  </div>
+  <div id="modal">
+  </div>
+  <script src="aes.js"></script>
+  <script src="dec-enc.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>
