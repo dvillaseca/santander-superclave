@@ -92,9 +92,6 @@ function passEnter(callback) {
       window.close();
     });
   }
-  pass.onkeypress = (code) => {
-    console.log(code);
-  };
 }
 function reset() {
   let main = document.getElementById('main');
