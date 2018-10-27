@@ -59,7 +59,7 @@ function createNew() {
     }
   }
   //pass1.value = '';
-  io.innerHTML = 'Clave: ';
+  io.innerHTML = '<b>Recomendacion: ocupar clave fuerte (numeros, mayusculas, signos y de al menos 8 caracteres)</b><br><br>Clave:';
   pass1 = document.createElement('input');
   pass1.type = 'password';
   pass1.maxLength = 30;
@@ -114,7 +114,7 @@ function save() {
   let superClave = {};
   let index = 0;
   for (let letter in inputs) {
-    index=1;
+    index = 1;
     if (superClave[letter] == null)
       superClave[letter] = [];
     for (let c of inputs[letter]) {
@@ -126,7 +126,7 @@ function save() {
       superClave[letter].push(val);
       index++;
     }
-  }
+  }  
   chrome.storage.sync.set({ superClave: encrypt(JSON.stringify(superClave), pass1.value) });
   messagePopup("SuperClave Guardada!");
 }

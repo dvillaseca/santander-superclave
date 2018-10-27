@@ -1,6 +1,18 @@
 'use strict';
 let btn;
 let addPassword = document.getElementById('addPassword');
+chrome.storage.sync.get('superClave', function (data) {
+  if (data.superClave != null)
+    return;
+  let main = document.getElementById('main');
+  main.innerHTML = '';
+  let btn = document.createElement('button');
+  btn.onclick = () => {
+    chrome.tabs.create({ 'url': "/options.html" });
+  }
+  btn.innerHTML = 'Configurar';
+  main.appendChild(btn);
+});
 addPassword.onclick = function (element) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.executeScript(
