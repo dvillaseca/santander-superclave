@@ -71,6 +71,7 @@ function processCoordinates(data, tabId) {
 function passEnter(callback) {
   let main = document.getElementById('main');
   let pass = document.createElement('input');
+  document.body.style.height = '163px';
   pass.autofocus = true;
   btn = document.createElement('button');
   btn.innerHTML = 'ENVIAR';
@@ -79,7 +80,6 @@ function passEnter(callback) {
   pass.placeholder = 'Escribe tu password';
   main.innerHTML = '';
   main.append(pass);
-  main.innerHTML += '<br><br>';
   main.appendChild(btn);
   btn.onclick = () => {
     chrome.storage.sync.get('superClave', function (data) {
@@ -97,7 +97,7 @@ function passEnter(callback) {
       }
       if (superClave == null || superClave.A == null || superClave.A.length != 5) {
         messagePopup("Clave Incorrecta");
-        return reset();
+        return;
       }
       callback(superClave);
       reset();
@@ -109,6 +109,7 @@ function reset() {
   let main = document.getElementById('main');
   main.innerHTML = '';
   main.appendChild(addPassword);
+  document.body.style.height = '110px';
 }
 function messagePopup(text) {
   let modal = document.getElementById('modal');
