@@ -10,6 +10,12 @@
       margin: auto;
     }
 
+    .cont {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
     #main {
       text-align: center;
     }
@@ -19,7 +25,6 @@
       width: 100%;
       top: 0;
       left: 0;
-      padding-top: 5px;
       position: absolute;
       background: #FFF;
       text-align: center;
@@ -27,18 +32,36 @@
       font-size: 80%;
       font-weight: bold;
     }
+
+    #modal button {
+      margin: 5px 0 0 0;
+    }
+
+    #edit {
+      top: 1px;
+      position: absolute;
+      right: 3px;
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      padding: 0;
+      background-image: url("images/edit_white_192x192.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
   </style>
 </head>
 
 <body>
-  <div style="margin:auto;width:170px">
-    <h4 style="text-align:center; margin-top:5px">
+  <div class="cont">
+    <h4 style="text-align:center">
       Super Clave
     </h4>
     <div id="main">
       <button id="addPassword">BUSCAR CAMPO</button>
     </div>
   </div>
+  <button id="edit"></button>
   <div id="modal">
   </div>
   <script src="aes.js"></script>

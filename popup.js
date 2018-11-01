@@ -1,15 +1,14 @@
 'use strict';
 let btn;
 let addPassword = document.getElementById('addPassword');
+document.getElementById('edit').onclick = edit;
 chrome.storage.sync.get('superClave', function (data) {
   if (data.superClave != null)
     return;
   let main = document.getElementById('main');
   main.innerHTML = '';
   let btn = document.createElement('button');
-  btn.onclick = () => {
-    chrome.tabs.create({ 'url': "/options.html" });
-  }
+  btn.onclick = edit;
   btn.innerHTML = 'Configurar';
   main.appendChild(btn);
 });
@@ -72,6 +71,7 @@ function processCoordinates(data, tabId) {
 function passEnter(callback) {
   let main = document.getElementById('main');
   let pass = document.createElement('input');
+  pass.autofocus = true;
   btn = document.createElement('button');
   btn.innerHTML = 'ENVIAR';
   pass.type = 'password';
@@ -113,11 +113,18 @@ function reset() {
 function messagePopup(text) {
   let modal = document.getElementById('modal');
   modal.style.display = 'block';
-  modal.innerHTML = text + "<br>";
+  modal.innerHTML = '';
+  let d = document.createElement('div');
+  modal.appendChild(d);
+  d.innerHTML = text + "<br>";
+  d.className = 'cont';
   let button = document.createElement('button');
   button.innerHTML = 'OK';
   button.onclick = () => {
     modal.style.display = 'none';
   }
-  modal.appendChild(button);
+  d.appendChild(button);
+}
+function edit() {
+  chrome.tabs.create({ 'url': "/options.html" });
 }
