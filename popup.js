@@ -71,6 +71,7 @@ function processCoordinates(data, tabId) {
 function passEnter(callback) {
   let main = document.getElementById('main');
   let pass = document.createElement('input');
+  document.getElementById('edit').style.display = 'none';
   document.body.style.height = '163px';
   pass.autofocus = true;
   btn = document.createElement('button');
