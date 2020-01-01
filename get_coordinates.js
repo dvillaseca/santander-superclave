@@ -23,6 +23,9 @@ function searchCode(node) {
 }
 var coors = [];
 var inputs = document.getElementsByClassName("challengeItem");
+if (inputs == null || inputs.length != 3) {
+    inputs = document.getElementsByClassName("superclave__label");
+}
 if (inputs != null && inputs.length == 3) {
     for (let inp of inputs) {
         let node = inp;

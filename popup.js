@@ -54,11 +54,29 @@ function processCoordinates(data, tabId) {
   passEnter((superClave) => {
     const codes = coors.map((c) => { return ('00' + superClave[c[0]][parseInt(c[1]) - 1]).slice(-2); });
     let code = `
+    function createEvent(ename) {
+      var ev = new Event(ename);
+      ev.initEvent(ename, true, false);
+      return ev;
+    }
     var inputs = document.getElementsByClassName("challengeItem");
+    var newSystem = false;
+    if (inputs == null || inputs.length != 3) {
+        inputs = document.getElementsByClassName("superclave__input");
+        newSystem = true;
+    }
     if (inputs != null && inputs.length == 3) {
-      for (let i = 0; i < inputs.length; i++) {
-        inputs[i].value = codes[i];
-      }
+        for (let i = 0; i < inputs.length; i++) {
+            var input = inputs[i];
+            if (newSystem) {
+                input.dispatchEvent(createEvent('blur'));
+            }
+            input.value = codes[i];
+            if (newSystem) {
+                input.dispatchEvent(createEvent('input'));
+                input.dispatchEvent(new KeyboardEvent('keyup', { keyCode: 0 }));
+            }
+        }
     }`;
     code = 'var codes = ' + JSON.stringify(codes) + ';' + code;
     chrome.tabs.executeScript(tabId, {
