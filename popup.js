@@ -30,7 +30,7 @@ document.addEventListener('keypress', (event) => {
     let modal = document.getElementById('modal');
     if (modal != null && modal.style.display != 'none')
       modal.style.display = 'none';
-    if (btn != null)
+    else if (btn != null)
       btn.onclick();
   }
 });
