@@ -29,6 +29,9 @@ document.addEventListener('keypress', (event) => {
   if (event.keyCode == 13) {
     if (btn != null)
       btn.onclick();
+    let modal = document.getElementById('modal');
+    if (modal != null && modal.style.display != 'none')
+      modal.style.display = 'none';
   }
 });
 
