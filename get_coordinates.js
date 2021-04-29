@@ -27,6 +27,8 @@ if (inputs == null || inputs.length != 3)
     inputs = document.getElementsByClassName("superclave__label");
 if (inputs == null || inputs.length != 3)
     inputs = document.getElementsByClassName("label");
+if (inputs == null || inputs.length != 3)
+    inputs = document.getElementsByClassName("placeholder");
 
 if (inputs != null && inputs.length == 3) {
     for (let inp of inputs) {
