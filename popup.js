@@ -88,7 +88,14 @@ function processCoordinates(data, tabId) {
                 input.dispatchEvent(new KeyboardEvent('keyup', { keyCode: 0 }));
             }
         }
-    }`;
+        //this is for the dolar buy case...
+        var submitButton = document.getElementById('PER_Aceptar');
+        if (submitButton != null) {
+            submitButton.disabled = false;
+            submitButton.classList.remove("botonInactivo");
+        }
+    }
+    `;
     code = 'var codes = ' + JSON.stringify(codes) + ';' + code;
     chrome.tabs.executeScript(tabId, {
       code: code,
