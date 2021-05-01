@@ -1,6 +1,6 @@
 {
   "name": "Santander SuperClave",
-  "version": "1.19",
+  "version": "1.20",
   "description": "Super Clave Automatica!",
   "permissions": [
     "activeTab",

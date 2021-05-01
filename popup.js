@@ -72,7 +72,7 @@ function processCoordinates(data, tabId) {
         inputs = document.getElementsByClassName("superclave_container-input");
         newSystem = true;
     }
-    if(inputs == null || inputs.lenth != 3) {      
+    if (inputs == null || inputs.length != 3) {      
         inputs = document.getElementsByClassName("super-clave__input");
         newSystem = true;
     }
