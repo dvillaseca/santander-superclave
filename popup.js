@@ -12,17 +12,13 @@ chrome.storage.sync.get('superClave', function (data) {
   btn.innerHTML = 'Configurar';
   main.appendChild(btn);
 });
-addPassword.onclick = function (element) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
-      tabs[0].id,
-      {
-        file: 'get_coordinates.js',
-        allFrames: true
-      },
-      function (data) {
-        processCoordinates(data, tabs[0].id);
-      });
+addPassword.onclick = async function (element) {
+  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    files: ['get_coordinates.js']
+  }, function (data) {
+    processCoordinates(data, tab.id);
   });
 };
 document.addEventListener('keypress', (event) => {
@@ -34,73 +30,71 @@ document.addEventListener('keypress', (event) => {
       btn.onclick();
   }
 });
-
-function processCoordinates(data, tabId) {
-  let coors;
-  if (data != null && data.length > 0) {
-    for (let d of data) {
-      if (d != null && d.length == 3) {
-        coors = d;
-        break;
+function injectFinalCodes(codes) {
+  function createEvent(ename) {
+    var ev = new Event(ename);
+    ev.initEvent(ename, true, false);
+    return ev;
+  }
+  var inputs = document.getElementsByClassName("challengeItem");
+  var newSystem = false;
+  if (inputs == null || inputs.length != 3) {
+    inputs = document.getElementsByClassName("superclave__input");
+    newSystem = true;
+  }
+  if (inputs == null || inputs.length != 3) {
+    inputs = document.getElementsByClassName("superclave_container-input");
+    newSystem = true;
+  }
+  if (inputs == null || inputs.length != 3) {
+    inputs = document.getElementsByClassName("super-clave__input");
+    newSystem = true;
+  }
+  if (inputs != null && inputs.length == 3) {
+    for (let i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      if (newSystem) {
+        input.dispatchEvent(createEvent('blur'));
+      }
+      input.value = codes[i];
+      if (newSystem) {
+        input.dispatchEvent(createEvent('input'));
+        input.dispatchEvent(new KeyboardEvent('keyup', { keyCode: 0 }));
       }
     }
+    //this is for the dolar buy case...
+    var submitButton = document.getElementById('PER_Aceptar');
+    if (submitButton != null) {
+      submitButton.disabled = false;
+      submitButton.classList.remove("botonInactivo");
+    }
   }
-  if (coors == null)
+}
+function processCoordinates(frameData, tabId) {
+  let frameWithCoors = null;
+  for (let frame of frameData) {
+    if (frame.result != null && frame.result.length == 3) {
+      frameWithCoors = frame;
+      break;
+    }
+  }
+  if (frameWithCoors == null)
     return messagePopup('No existe ningun campo de superclave en la pagina');
 
-  for (let co of coors) {
+  for (let co of frameWithCoors.result) {
     if (typeof co != 'string')
       return messagePopup('No existe ningun campo de superclave en la pagina');
     if (co.length != 2)
       return messagePopup('No existe ningun campo de superclave en la pagina');
   }
   passEnter((superClave) => {
-    const codes = coors.map((c) => { return ('00' + superClave[c[0]][parseInt(c[1]) - 1]).slice(-2); });
-    let code = `
-    function createEvent(ename) {
-      var ev = new Event(ename);
-      ev.initEvent(ename, true, false);
-      return ev;
-    }
-    var inputs = document.getElementsByClassName("challengeItem");
-    var newSystem = false;
-    if (inputs == null || inputs.length != 3) {
-        inputs = document.getElementsByClassName("superclave__input");
-        newSystem = true;
-    }
-    if (inputs == null || inputs.length != 3) {      
-        inputs = document.getElementsByClassName("superclave_container-input");
-        newSystem = true;
-    }
-    if (inputs == null || inputs.length != 3) {      
-        inputs = document.getElementsByClassName("super-clave__input");
-        newSystem = true;
-    }
-    if (inputs != null && inputs.length == 3) {
-        for (let i = 0; i < inputs.length; i++) {
-            var input = inputs[i];
-            if (newSystem) {
-                input.dispatchEvent(createEvent('blur'));
-            }
-            input.value = codes[i];
-            if (newSystem) {
-                input.dispatchEvent(createEvent('input'));
-                input.dispatchEvent(new KeyboardEvent('keyup', { keyCode: 0 }));
-            }
-        }
-        //this is for the dolar buy case...
-        var submitButton = document.getElementById('PER_Aceptar');
-        if (submitButton != null) {
-            submitButton.disabled = false;
-            submitButton.classList.remove("botonInactivo");
-        }
-    }
-    `;
-    code = 'var codes = ' + JSON.stringify(codes) + ';' + code;
-    chrome.tabs.executeScript(tabId, {
-      code: code,
-      allFrames: true
-    });
+    let codes = frameWithCoors.result.map((c) => { return ('00' + superClave[c[0]][parseInt(c[1]) - 1]).slice(-2); });
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tabId, frameIds: [frameWithCoors.frameId] },
+        func: injectFinalCodes,
+        args: [codes]
+      });
     superClave = null;
   })
 }

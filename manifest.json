@@ -1,14 +1,14 @@
 {
   "name": "Santander SuperClave",
-  "version": "1.20",
+  "version": "1.21",
   "description": "Super Clave Automatica!",
   "permissions": [
     "activeTab",
     "storage",
-    "<all_urls>"
+    "scripting"
   ],
   "options_page": "options.html",
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html",
     "default_title": "Santander SuperClave",
     "default_icon": {
@@ -22,5 +22,5 @@
     "48": "images/sant48.png",
     "128": "images/sant128.png"
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }

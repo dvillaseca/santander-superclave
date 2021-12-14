@@ -99,7 +99,7 @@ function load() {
     createNew();
     for (let letter in inputs) {
       for (let i = 0; i < inputs[letter].length; i++) {
-        inputs[letter][i].value = superClave[letter][i];
+        inputs[letter][i].value = ('00' + superClave[letter][i]).slice(-2);
       }
     }
   });
