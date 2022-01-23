@@ -127,6 +127,7 @@ function passEnter(callback) {
         console.log(e);
       }
       if (superClave == null || superClave.A == null || superClave.A.length != 5) {
+        pass.value = "";
         messagePopup("Clave Incorrecta");
         return;
       }
