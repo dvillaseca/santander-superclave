@@ -3,8 +3,10 @@ let btn;
 let addPassword = document.getElementById('addPassword');
 document.getElementById('edit').onclick = edit;
 chrome.storage.sync.get('superClave', function (data) {
-  if (data.superClave != null)
+  if (data.superClave != null) {
+    getCoordinates();
     return;
+  }
   let main = document.getElementById('main');
   main.innerHTML = '';
   let btn = document.createElement('button');
@@ -12,15 +14,7 @@ chrome.storage.sync.get('superClave', function (data) {
   btn.innerHTML = 'Configurar';
   main.appendChild(btn);
 });
-addPassword.onclick = async function (element) {
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id, allFrames: true },
-    files: ['get_coordinates.js']
-  }, function (data) {
-    processCoordinates(data, tab.id);
-  });
-};
+addPassword.onclick = getCoordinates;
 document.addEventListener('keypress', (event) => {
   if (event.keyCode == 13) {
     let modal = document.getElementById('modal');
@@ -30,26 +24,56 @@ document.addEventListener('keypress', (event) => {
       btn.onclick();
   }
 });
+async function getCoordinates() {
+  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    files: ['get_coordinates.js']
+  }, function (data) {
+    processCoordinates(data, tab.id);
+  });
+}
 function injectFinalCodes(codes) {
   function createEvent(ename) {
     var ev = new Event(ename);
     ev.initEvent(ename, true, false);
     return ev;
   }
-  var inputs = document.getElementsByClassName("challengeItem");
-  var newSystem = false;
-  if (inputs == null || inputs.length != 3) {
-    inputs = document.getElementsByClassName("superclave__input");
-    newSystem = true;
+
+  function getInputs(doc) {
+    let inputs = doc.getElementsByClassName("challengeItem");
+    let newSystem = false;
+    if (inputs == null || inputs.length != 3) {
+      inputs = doc.getElementsByClassName("superclave__input");
+      newSystem = true;
+    }
+    if (inputs == null || inputs.length != 3) {
+      inputs = doc.getElementsByClassName("superclave_container-input");
+      newSystem = true;
+    }
+    if (inputs == null || inputs.length != 3) {
+      inputs = doc.getElementsByClassName("super-clave__input");
+      newSystem = true;
+    }
+    if (inputs == null || inputs.length != 3) {
+      inputs = doc.querySelectorAll('input[type="password"]');
+      newSystem = true;
+    }
+    if (inputs == null || inputs.length != 3) {
+      let iframes = doc.querySelectorAll('iframe');
+      for (let i = 0; i < iframes.length; i++) {
+        let result = getInputs(iframes[i].contentWindow.document);
+        if (result.inputs.length == 3)
+          return result;
+      }
+    }
+    return { inputs, newSystem };
   }
-  if (inputs == null || inputs.length != 3) {
-    inputs = document.getElementsByClassName("superclave_container-input");
-    newSystem = true;
-  }
-  if (inputs == null || inputs.length != 3) {
-    inputs = document.getElementsByClassName("super-clave__input");
-    newSystem = true;
-  }
+
+  var inputResult = getInputs(document);
+  var inputs = inputResult.inputs;
+  var newSystem = inputResult.inputs;
+
   if (inputs != null && inputs.length == 3) {
     for (let i = 0; i < inputs.length; i++) {
       var input = inputs[i];
