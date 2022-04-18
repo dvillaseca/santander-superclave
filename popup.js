@@ -67,7 +67,7 @@ function injectFinalCodes(codes) {
           return result;
       }
     }
-    return { inputs, newSystem };
+    return { inputs, newSystem, doc };
   }
 
   var inputResult = getInputs(document);
@@ -87,7 +87,7 @@ function injectFinalCodes(codes) {
       }
     }
     //this is for the dolar buy case...
-    var submitButton = document.getElementById('PER_Aceptar');
+    var submitButton = inputResult.doc.getElementById('PER_Aceptar');
     if (submitButton != null) {
       submitButton.disabled = false;
       submitButton.classList.remove("botonInactivo");
