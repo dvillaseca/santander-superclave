@@ -1,11 +1,15 @@
 {
   "name": "Santander SuperClave",
-  "version": "1.23",
+  "version": "1.24",
   "description": "Super Clave Automatica!",
   "permissions": [
     "activeTab",
     "storage",
-    "scripting"
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "*://*/*"
   ],
   "options_page": "options.html",
   "action": {

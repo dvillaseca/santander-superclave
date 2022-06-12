@@ -26,12 +26,23 @@ document.addEventListener('keypress', (event) => {
 });
 async function getCoordinates() {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id, allFrames: true },
-    files: ['get_coordinates.js']
-  }, function (data) {
-    processCoordinates(data, tab.id);
+  chrome.webNavigation.getAllFrames({ tabId: tab.id }, (frames) => {
+    const frameIds = frames
+      .map((f) => f.frameId);
+
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id, frameIds: frameIds },
+      files: ['get_coordinates.js']
+    }, function (data) {
+      processCoordinates(data, tab.id);
+    });
   });
+  // chrome.scripting.executeScript({
+  //   target: { tabId: tab.id, allFrames: true },
+  //   files: ['get_coordinates.js']
+  // }, function (data) {
+  //   processCoordinates(data, tab.id);
+  // });
 }
 function injectFinalCodes(codes) {
   function createEvent(ename) {
@@ -59,14 +70,14 @@ function injectFinalCodes(codes) {
       inputs = doc.querySelectorAll('input[type="password"]');
       newSystem = true;
     }
-    if (inputs == null || inputs.length != 3) {
-      let iframes = doc.querySelectorAll('iframe');
-      for (let i = 0; i < iframes.length; i++) {
-        let result = getInputs(iframes[i].contentWindow.document);
-        if (result.inputs.length == 3)
-          return result;
-      }
-    }
+    // if (inputs == null || inputs.length != 3) {
+    //   let iframes = doc.querySelectorAll('iframe');
+    //   for (let i = 0; i < iframes.length; i++) {
+    //     let result = getInputs(iframes[i].contentWindow.document);
+    //     if (result.inputs.length == 3)
+    //       return result;
+    //   }
+    // }
     return { inputs, newSystem, doc };
   }
 

@@ -46,14 +46,14 @@ function getCoordinates(doc) {
                 coors.push(code);
         }
     }
-    if (coors.length == 3)
-        return coors;
-    var iframes = doc.querySelectorAll('iframe');
-    for (let i = 0; i < iframes.length; i++) {
-        let c = getCoordinates(iframes[i].contentWindow.document);
-        if (c.length == 3)
-            return c;
-    }
+    // if (coors.length == 3)
+    //     return coors;
+    // var iframes = doc.querySelectorAll('iframe');
+    // for (let i = 0; i < iframes.length; i++) {
+    //     let c = getCoordinates(iframes[i].contentWindow.document);
+    //     if (c.length == 3)
+    //         return c;
+    // }
     return coors;
 }
 getCoordinates(document);
